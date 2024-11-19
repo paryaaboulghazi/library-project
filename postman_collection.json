@@ -1,0 +1,70 @@
+{
+	"info": {
+		"_postman_id": "5c55da2c-ebc8-4fc8-9068-be8d9537502a",
+		"name": "DrDr",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34794772",
+		"_collection_link": "https://warped-desert-369095.postman.co/workspace/My-Workspace~391a50e6-ff5f-4ccc-8df4-25694a4c6926/collection/34794772-5c55da2c-ebc8-4fc8-9068-be8d9537502a?action=share&source=collection_link&creator=34794772"
+	},
+	"item": [
+		{
+			"name": "repos list",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/repos?username=mehdijalalii",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"repos"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "mehdijalalii"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://127.0.0.1:9001",
+			"type": "string"
+		}
+	]
+}
