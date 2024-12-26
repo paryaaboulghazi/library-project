@@ -9,17 +9,6 @@ class Router
     private static $container;
 
     /**
-     * Set the container for dependency injection
-     *
-     * @param mixed $container The container object (usually for dependency resolution)
-     * @return void
-     */
-    public static function setContainer($container): void
-    {
-        self::$container = $container;
-    }
-
-    /**
      * Define a GET route
      *
      * @param string $uri The URI for the route
@@ -73,6 +62,12 @@ class Router
      * @param string $requestUri The URI of the incoming request
      * @return void
      */
+    /**
+     * Dispatch the request to the appropriate controller action
+     *
+     * @param string $requestUri The URI of the incoming request
+     * @return void
+     */
     public static function dispatch(string $requestUri): void
     {
         $method = $_SERVER['REQUEST_METHOD'];
@@ -81,24 +76,33 @@ class Router
             self::$container = require __DIR__ . '/../../bootstrap.php';
         }
 
-        if (isset(self::$routes[$method][$requestUri])) {
-            $controllerAction = self::$routes[$method][$requestUri];
-            [$controllerName, $actionName] = $controllerAction;
+        if (isset(self::$routes[$method])) {
+            foreach (self::$routes[$method] as $route => $controllerAction) {
+                $pattern = preg_replace('/\{(\w+)\}/', '(?P<\1>[^/]+)', $route);
+                $pattern = '#^' . $pattern . '$#';
 
-            $controller = self::$container->resolve($controllerName);
+                if (preg_match($pattern, $requestUri, $matches)) {
+                    [$controllerName, $actionName] = $controllerAction;
 
-            $requestParams = $_GET;
+                    $controller = self::$container->resolve($controllerName);
 
-            if (method_exists($controller, $actionName)) {
-                $controller->{$actionName}($_GET);
-            } elseif (method_exists($controller, '__invoke')) {
-                $controller($requestParams);
-            } else {
-                throw new \Exception("Action {$actionName} not found in {$controllerName}");
+                    $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
+
+                    if (method_exists($controller, $actionName)) {
+                        $controller->{$actionName}(...array_values($params));
+                    } elseif (method_exists($controller, '__invoke')) {
+                        $controller($params);
+                    } else {
+                        throw new \Exception("Action {$actionName} not found in {$controllerName}");
+                    }
+
+                    return;
+                }
             }
-        } else {
-            http_response_code(404);
-            echo "Route not found: {$requestUri}";
         }
+
+        http_response_code(404);
+        echo "Route not found: {$requestUri}";
     }
+
 }

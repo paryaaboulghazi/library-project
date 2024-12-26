@@ -1,8 +1,8 @@
 {
-    "name": "mehdi/drdr-challenge",
-    "description": "DrDr Code Challenge",
+    "name": "pariya/library-project",
+    "description": "University Code Challenge",
     "require": {
-        "php": "^8.3",
+        "php": "^8.2",
         "phpunit/phpunit": "^11.4",
         "zircote/swagger-php": "^4.11",
         "guzzlehttp/guzzle": "^7.9",
@@ -14,11 +14,5 @@
         "psr-4": {
             "Src\\": "src/"
         }
-    },
-    "authors": [
-        {
-            "name": "Mehdi Jalali",
-            "email": "mehdi.jalalii03@gmail.com"
-        }
-    ]
+    }
 }
